@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b18">
+<title>NEXUS AI</title>
+<style>
+:root{--bg:#070b18;--panel:#0d1427;--line:#243250;--cyan:#53e7ff;--violet:#9a7bff;--text:#eef5ff;--muted:#9caecb}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 50% -10%,#172a53 0,transparent 45%),var(--bg);color:var(--text);font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif;min-height:100vh}
+button,input,textarea,select{font:inherit}button{cursor:pointer}
+.app{max-width:1100px;margin:auto;min-height:100dvh;display:flex;flex-direction:column;padding:16px;gap:14px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;border:1px solid var(--line);border-radius:18px;background:#0b1223dd;backdrop-filter:blur(16px)}
+.brand{display:flex;align-items:center;gap:11px}.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--cyan),var(--violet));display:grid;place-items:center;color:#07101e;font-weight:900;font-size:22px;box-shadow:0 0 28px #53e7ff30}.brand h1{font-size:17px;letter-spacing:3px;margin:0}.brand small{display:block;color:var(--muted);font-size:11px;letter-spacing:1.3px;margin-top:3px}
+.status{font-size:12px;color:#8af5ca;display:flex;align-items:center;gap:7px}.dot{width:7px;height:7px;background:#53e7a2;border-radius:50%;box-shadow:0 0 10px #53e7a2}
+.layout{display:grid;grid-template-columns:250px 1fr;gap:14px;flex:1;min-height:0}
+.side,.chat{border:1px solid var(--line);background:#0b1223df;border-radius:20px;min-height:0}
+.side{padding:16px;display:flex;flex-direction:column;gap:12px}.section-title{font-size:10px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin:8px 0}
+.side button,.quick button,.toolbar button,.secondary{background:#111d34;border:1px solid #293b5d;color:var(--text);border-radius:12px;padding:11px 12px;text-align:left}
+.side button:hover,.quick button:hover,.toolbar button:hover{border-color:var(--cyan)}
+.side .primary{background:linear-gradient(110deg,#153c59,#28234c);border-color:#3a7898}
+.note{color:var(--muted);font-size:12px;line-height:1.55;margin-top:auto}
+.chat{display:flex;flex-direction:column;overflow:hidden}
+.chat-head{padding:16px 18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}.chat-head strong{font-size:14px}.chat-head small{color:var(--muted);font-size:11px}
+.messages{padding:20px;display:flex;flex-direction:column;gap:16px;overflow:auto;flex:1;min-height:300px}
+.welcome{text-align:center;margin:auto;max-width:470px;padding:20px 4px}.orb{width:88px;height:88px;border-radius:50%;margin:0 auto 22px;display:grid;place-items:center;border:1px solid #56e7ff77;background:radial-gradient(circle at 30% 25%,#58efff55,#5d40a722 55%,transparent);box-shadow:0 0 45px #52dfff1c,inset 0 0 25px #52dfff1c;font-size:34px}.welcome h2{font-size:27px;margin:0 0 10px;letter-spacing:1px}.welcome p{color:var(--muted);line-height:1.65;margin:0 0 20px}
+.quick{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}.quick button{font-size:12px;text-align:center}
+.msg{max-width:88%;padding:13px 15px;border:1px solid #243653;border-radius:16px;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere;font-size:14px}.msg.user{align-self:flex-end;background:linear-gradient(130deg,#17314a,#242044);border-color:#3b5377}.msg.ai{align-self:flex-start;background:#101a2d}.msg .label{display:block;color:var(--cyan);font-size:10px;letter-spacing:1.3px;margin-bottom:5px}
+.composer{border-top:1px solid var(--line);padding:14px;display:flex;flex-direction:column;gap:10px}.toolbar{display:flex;gap:8px;flex-wrap:wrap}.toolbar button{font-size:12px;padding:8px 10px}.composer-row{display:flex;gap:9px;align-items:flex-end}.composer textarea{flex:1;resize:vertical;min-height:48px;max-height:150px;background:#070e1c;color:var(--text);border:1px solid #2b3c5d;border-radius:14px;padding:13px;outline:none}.composer textarea:focus{border-color:var(--cyan)}.send{border:0;border-radius:14px;padding:14px 18px;background:linear-gradient(135deg,var(--cyan),#9a7bff);color:#07101d;font-weight:800;min-height:48px}.send:disabled{opacity:.45;cursor:wait}
+.modal-back{position:fixed;inset:0;background:#02040bdc;display:none;place-items:center;padding:16px;z-index:5}.modal{width:min(520px,100%);background:#0c1528;border:1px solid #314364;border-radius:20px;padding:20px;box-shadow:0 25px 100px #0008}.modal h2{margin-top:0}.modal label{display:block;color:var(--muted);font-size:12px;margin:14px 0 6px}.modal input,.modal select{width:100%;padding:12px;background:#060d1a;border:1px solid #2b3c5d;border-radius:10px;color:var(--text)}.modal .actions{display:flex;gap:9px;justify-content:flex-end;margin-top:18px}.modal .actions button{border-radius:10px;padding:10px 14px;border:1px solid #30415f;background:#15223b;color:var(--text)}.modal .actions .save{background:linear-gradient(135deg,var(--cyan),var(--violet));color:#07101d;border:0;font-weight:800}.hint{font-size:12px;color:var(--muted);line-height:1.55}.typing{color:var(--muted);font-size:13px}
+@media(max-width:760px){.app{padding:9px;gap:9px}header{padding:10px}.layout{grid-template-columns:1fr}.side{display:none}.chat{min-height:calc(100dvh - 90px)}.chat-head{padding:12px 14px}.messages{padding:14px}.msg{max-width:94%}.welcome h2{font-size:23px}.composer{padding:10px}.send{padding:12px}.brand h1{font-size:15px}.status{font-size:10px}}
+</style>
+</head>
+<body>
+<div class="app">
+<header>
+ <div class="brand"><div class="logo">N</div><div><h1>NEXUS AI</h1><small>INTELIGÊNCIA • CONVERSA • FUTURO</small></div></div>
+ <div class="status"><span class="dot"></span><span id="statusText">INTERFACE PRONTA</span></div>
+</header>
+<div class="layout">
+ <aside class="side">
+  <button class="primary" id="newChat">＋ Nova conversa</button>
+  <div class="section-title">Ferramentas</div>
+  <button id="voiceToggle">🎙️ Conversar por voz</button>
+  <button id="speakToggle">🔊 Voz: ativada</button>
+  <button id="settingsOpen">⚙️ Configurações</button>
+  <div class="section-title">Experimente</div>
+  <button data-prompt="Explique inteligência artificial de um jeito simples.">✦ Aprender algo</button>
+  <button data-prompt="Me ajude a criar um plano para uma ideia de aplicativo.">✦ Criar um projeto</button>
+  <button data-prompt="Me dê 5 ideias criativas e explique como começar.">✦ Ter ideias</button>
+  <p class="note">A NEXUS AI é um projeto pessoal. As respostas da IA real exigem uma API configurada no servidor. Não coloque sua chave secreta nesta página.</p>
+ </aside>
+ <main class="chat">
+  <div class="chat-head"><div><strong>Canal de conversa</strong><br><small id="substatus">Pronta para ajudar você</small></div><button class="secondary" id="clearChat">Limpar</button></div>
+  <div class="messages" id="messages">
+   <div class="welcome" id="welcome"><div class="orb">✧</div><h2>Olá. Eu sou a NEXUS.</h2><p>Sua assistente de IA pessoal. Pergunte, crie, aprenda ou converse comigo por texto e voz.</p><div class="quick"><button data-prompt="O que você consegue fazer?">O que você faz?</button><button data-prompt="Me ensine algo interessante em 1 minuto.">Me ensine algo</button><button data-prompt="Me ajude a organizar meu dia.">Organizar meu dia</button></div></div>
+  </div>
+  <div class="composer">
+   <div class="toolbar"><button id="micButton">🎙️ Falar</button><button id="stopVoice">⏹ Parar voz</button><button id="webHint">🌐 Pesquisa (se configurada)</button></div>
+   <div class="composer-row"><textarea id="prompt" rows="1" placeholder="Escreva sua mensagem para a NEXUS..."></textarea><button class="send" id="send">Enviar ➤</button></div>
+  </div>
+ </main>
+</div>
+</div>
+<div class="modal-back" id="modalBack"><div class="modal">
+ <h2>⚙️ Configurações</h2>
+ <p class="hint">Personalize a conversa. A chave de API deve ficar no servidor, nunca no navegador.</p>
+ <label for="voiceSelect">Voz para respostas faladas</label><select id="voiceSelect"></select>
+ <label for="assistantStyle">Estilo da NEXUS</label><select id="assistantStyle"><option value="balanced">Equilibrado</option><option value="friendly">Amigável</option><option value="concise">Direto e curto</option><option value="creative">Criativo</option></select>
+ <label for="apiBase">Endereço do servidor (opcional)</label><input id="apiBase" placeholder="Ex.: https://seu-app.onrender.com">
+ <p class="hint">Se publicado junto com o servidor, deixe este campo vazio. A voz depende das opções disponíveis no seu dispositivo/navegador.</p>
+ <div class="actions"><button id="settingsClose">Cancelar</button><button class="save" id="settingsSave">Salvar configurações</button></div>
+</div></div>
+<script>
+const $=s=>document.querySelector(s);
+const messages=$('#messages'), promptBox=$('#prompt');
+let history=[], busy=false, speaking=true, recognition=null, listening=false;
+let config={voice:'',style:'balanced',apiBase:''};
+try{Object.assign(config,JSON.parse(localStorage.getItem('nexus-config')||'{}'));history=JSON.parse(sessionStorage.getItem('nexus-history')||'[]')}catch(e){}
+function setStatus(t){$('#statusText').textContent=t}
+function escapeText(s){return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+function renderHistory(){messages.innerHTML=''; if(!history.length){messages.innerHTML='<div class="welcome" id="welcome"><div class="orb">✧</div><h2>Olá. Eu sou a NEXUS.</h2><p>Sua assistente de IA pessoal. Pergunte, crie, aprenda ou converse comigo por texto e voz.</p><div class="quick"><button data-prompt="O que você consegue fazer?">O que você faz?</button><button data-prompt="Me ensine algo interessante em 1 minuto.">Me ensine algo</button><button data-prompt="Me ajude a organizar meu dia.">Organizar meu dia</button></div></div>';return}history.forEach(m=>addBubble(m.role==='user'?'user':'ai',m.content,false));messages.scrollTop=messages.scrollHeight}
+function addBubble(role,text,save=true){const w=document.createElement('div');w.className='msg '+role;w.innerHTML='<span class="label">'+(role==='user'?'VOCÊ':'NEXUS AI')+'</span>'+escapeText(text);messages.appendChild(w);messages.scrollTop=messages.scrollHeight;if(save){history.push({role:role==='user'?'user':'assistant',content:text});sessionStorage.setItem('nexus-history',JSON.stringify(history))}return w}
+async function sendMessage(text){text=(text||promptBox.value).trim();if(!text||busy)return;promptBox.value='';$('#welcome')?.remove();addBubble('user',text);busy=true;$('#send').disabled=true;setStatus('PROCESSANDO');const typing=addBubble('ai','Pensando…',false);typing.classList.add('typing');
+ try{
+   const base=(config.apiBase||'').replace(/\/+$/,'');const response=await fetch(base+'/api/chat',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:text,history:history.slice(-20),style:config.style})});
+   if(!response.ok){let err='O servidor respondeu com erro ('+response.status+').';try{const d=await response.json();if(d.error)err=d.error}catch(e){}throw new Error(err)}
+   const data=await response.json();const answer=data.reply||'Não recebi uma resposta.';typing.remove();addBubble('ai',answer);if(speaking)speak(answer);setStatus('ONLINE');
+ }catch(e){typing.remove();const err='Não consegui conectar à IA real. '+e.message+'\n\nVerifique se o servidor está publicado e configurado. Se você ainda não publicou, esta interface não consegue gerar respostas reais sozinha.';addBubble('ai',err);setStatus('SERVIDOR NÃO CONECTADO')}
+ finally{busy=false;$('#send').disabled=false;promptBox.focus()}
+}
+function availableVoices(){return window.speechSynthesis? speechSynthesis.getVoices():[]}
+function populateVoices(){const sel=$('#voiceSelect');if(!sel)return;const vs=availableVoices();sel.innerHTML='';if(!vs.length){sel.innerHTML='<option value="">Voz padrão do dispositivo</option>';return}vs.forEach((v,i)=>{const o=document.createElement('option');o.value=v.name;o.textContent=v.name+' ('+v.lang+')';sel.appendChild(o)});if(config.voice&&vs.some(v=>v.name===config.voice))sel.value=config.voice}
+function speak(text){if(!speaking||!window.speechSynthesis)return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='pt-BR';const v=availableVoices().find(v=>v.name===config.voice);if(v)u.voice=v;u.rate=1;u.pitch=1;speechSynthesis.speak(u)}
+function startListening(){const SR=window.SpeechRecognition||window.webkitSpeechRecognition;if(!SR){addBubble('ai','Seu navegador não oferece reconhecimento de voz nesta página. Tente abrir no Chrome compatível ou use o campo de texto.');return}if(listening){recognition?.stop();return}recognition=new SR();recognition.lang='pt-BR';recognition.interimResults=false;recognition.continuous=false;recognition.onstart=()=>{listening=true;$('#micButton').textContent='🔴 Ouvindo…';setStatus('OUVINDO')};recognition.onresult=e=>{const t=e.results[0][0].transcript;promptBox.value=t;sendMessage(t)};recognition.onerror=e=>{setStatus('VOZ INDISPONÍVEL');console.log(e.error)};recognition.onend=()=>{listening=false;$('#micButton').textContent='🎙️ Falar';if(!busy)setStatus('PRONTA')};recognition.start()}
+$('#send').onclick=()=>sendMessage();promptBox.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage()}});document.addEventListener('click',e=>{const b=e.target.closest('[data-prompt]');if(b)sendMessage(b.dataset.prompt)});
+$('#newChat').onclick=()=>{history=[];sessionStorage.removeItem('nexus-history');renderHistory()};$('#clearChat').onclick=()=>{history=[];sessionStorage.removeItem('nexus-history');renderHistory()};
+$('#micButton').onclick=startListening;$('#voiceToggle').onclick=startListening;$('#stopVoice').onclick=()=>{speechSynthesis?.cancel();if(recognition&&listening)recognition.stop()};$('#speakToggle').onclick=()=>{speaking=!speaking;$('#speakToggle').textContent=speaking?'🔊 Voz: ativada':'🔇 Voz: desativada';if(!speaking)speechSynthesis?.cancel()};
+$('#webHint').onclick=()=>addBubble('ai','A pesquisa na internet depende de o servidor estar configurado com a ferramenta de busca. Você pode perguntar normalmente; se a busca estiver habilitada, a NEXUS poderá usá-la.');
+$('#settingsOpen').onclick=()=>{$('#modalBack').style.display='grid';$('#assistantStyle').value=config.style;$('#apiBase').value=config.apiBase;populateVoices();if(config.voice)$('#voiceSelect').value=config.voice};$('#settingsClose').onclick=()=>$('#modalBack').style.display='none';$('#settingsSave').onclick=()=>{config.voice=$('#voiceSelect').value;config.style=$('#assistantStyle').value;config.apiBase=$('#apiBase').value.trim();localStorage.setItem('nexus-config',JSON.stringify(config));$('#modalBack').style.display='none'};
+if(window.speechSynthesis){populateVoices();speechSynthesis.onvoiceschanged=populateVoices}
+renderHistory();
+</script>
+</body>
+</html>
